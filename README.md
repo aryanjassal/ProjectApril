@@ -45,11 +45,11 @@ make run
 ## Features of the operating system
 
 - [ ] Phase 1 - Bare Minimum Functionality
-  - [-] Create a proper project structure
+  - [x] Create a proper project structure
   - [ ] Create a basic "Hello World" kernel
-    - [-] Booting into the kernel
-    - [-] Printing character to screen using assembly
-    - [-] Entering 32 bit protected mode
+    - [x] Booting into the kernel
+    - [x] Printing character to screen using assembly
+    - [x] Entering 32 bit protected mode
     - [ ] Entering 64 bit long mode
     - [ ] Linking C/C++ code to assembly
     - [ ] Echoing user input to screen using assembly
