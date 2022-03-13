@@ -12,3 +12,4 @@ struct IDT64 {
 };
 
 void initialize_idt();
+void isr1_handler();

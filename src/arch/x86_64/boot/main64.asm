@@ -1,5 +1,6 @@
 global long_mode_start
 [extern kmain]
+%include "idt.asm"
 
 [section .text]
 [bits 64]

@@ -5,6 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/include/kernel/**",
+                "${workspaceFolder}/src/include/kernel",
+                "${workspaceFolder}/src/include/kernel",
                 "${workspaceFolder}/src/include/kernel"
             ],
             "defines": [],
