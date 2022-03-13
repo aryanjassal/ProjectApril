@@ -40,7 +40,7 @@ make run
 
 ## Resources worth viewing
 
-- [https://github.com/zszafran/osdev](zszafran's operating system)
+- [zszafran's operating system](https://github.com/zszafran/osdev)
 
 ## Features of the operating system
 
