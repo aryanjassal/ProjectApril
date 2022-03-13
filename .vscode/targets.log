@@ -1,0 +1,435 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+ 
+# GNU Make 4.3
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Sun Mar 13 19:50:12 2022
+
+# Variables
+
+# environment
+GDK_BACKEND = x11
+# environment
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# makefile (from 'Makefile', line 12)
+x86_64_object_files :=   build/arch/x86_64/binaries.o  build/arch/x86_64/boot/main64.o  build/arch/x86_64/boot/header.o  build/arch/x86_64/boot/main.o  build/arch/x86_64/boot/main32.o
+# environment
+I3SOCK = /run/user/1000/i3/ipc-socket.816
+# makefile (from 'Makefile', line 6)
+x86_64_c_source_files := 
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-dadf4fef-e500-4f25-9838-b3b73fc6185d.sock
+# environment
+VSCODE_CWD = /home/aryanj
+# makefile (from 'Makefile', line 3)
+kernel_source_files := src/kernel/kernel.c src/kernel/impl/io.c src/kernel/impl/tty.c src/kernel/impl/idt.c
+# default
+MAKE_COMMAND := make
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# environment
+PWD = /home/aryanj/Projects/AprilOS/AprilOS_Rev3
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+MAIL = /var/spool/mail/aryanj
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = /home/aryanj/.config/Code/CachedData/c722ca6c7eed3d7987c0d5c3df5c45f6b15e77d1
+# environment
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session0
+# environment
+LANG = C
+# environment
+XAUTHORITY = /home/aryanj/.Xauthority
+# default
+.LOADED := 
+# makefile (from 'Makefile', line 9)
+x86_64_asm_source_files := src/arch/x86_64/binaries.asm src/arch/x86_64/boot/main64.asm src/arch/x86_64/boot/header.asm src/arch/x86_64/boot/main.asm src/arch/x86_64/boot/main32.asm
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
+# makefile
+CURDIR := /home/aryanj/Projects/AprilOS/AprilOS_Rev3
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+XDG_SESSION_DESKTOP = i3
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 29061
+# environment
+XDG_SESSION_TYPE = x11
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+*F = $(notdir $*)
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-gb","availableLanguages":{},"_languagePackSupport":true}
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# makefile
+SHELL = /bin/sh
+# default
+MAKECMDGOALS := all
+# environment
+DOTNET_BUNDLE_EXTRACT_BASE_DIR = /home/aryanj/.cache/dotnet_bundle_extract
+# environment
+SHLVL = 1
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = /usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/home/aryanj/.dotnet/tools:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+# default
+MAKEFILES := 
+# environment
+MOTD_SHOWN = pam
+# automatic
+^F = $(notdir $^)
+# makefile (from 'Makefile', line 7)
+x86_64_c_object_files := 
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?F = $(notdir $?)
+# environment
+XDG_SEAT = seat0
+# environment
+XDG_CURRENT_DESKTOP = i3
+# automatic
++F = $(notdir $+)
+# environment
+XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
+# environment
+DESKTOP_SESSION = i3
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = i3
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = aryanj
+# environment
+XDG_VTNR = 7
+# makefile (from 'Makefile', line 4)
+kernel_object_files :=  build/kernel/kernel.o  build/kernel/impl/io.o  build/kernel/impl/tty.o  build/kernel/impl/idt.o
+# makefile
+.DEFAULT_GOAL := build/kernel/kernel.o
+# environment
+DISPLAY = :0
+# environment
+GTK_MODULES = canberra-gtk-module
+# environment
+USER = aryanj
+# makefile (from 'Makefile', line 10)
+x86_64_asm_object_files :=  build/arch/x86_64/binaries.o  build/arch/x86_64/boot/main64.o  build/arch/x86_64/boot/header.o  build/arch/x86_64/boot/main.o  build/arch/x86_64/boot/main32.o
+# default
+MAKE_VERSION := 4.3
+# 'override' directive
+.SHELLSTATUS := 0
+# environment
+_ = /usr/bin/make
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /home/aryanj
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-dad78b4b-1.65.2-main.sock
+# environment
+XDG_SESSION_ID = 2
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+VSCODE_CLI = 1
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+XDG_GREETER_DATA_DIR = /var/lib/lightdm-data/aryanj
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
+# environment
+DOTNET_ROOT = /usr/share/dotnet
+# environment
+GDMSESSION = i3
+# variable set hash-table stats:
+# Load=94/1024=9%, Rehash=0, Collisions=5/147=3%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 66310, inode 27397796): 12 files, no impossibilities.
+
+# 12 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+build/arch/x86_64/boot/main32.o: src/arch/x86_64/boot/main32.asm
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'boot/main32'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 23):
+	mkdir -p $(dir $@) && \
+	nasm -f elf64 $(patsubst build/arch/x86_64/%.o, src/arch/x86_64/%.asm, $@) -o $@
+
+build/kernel/impl/idt.o: src/kernel/impl/idt.c
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'impl/idt'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 15):
+	mkdir -p $(dir $@) && \
+	x86_64-elf-gcc -c -I src/include/kernel -ffreestanding $(patsubst build/kernel/%.o, src/kernel/%.c, $@) -o $@
+
+# Not a target:
+src/arch/x86_64/boot/header.asm:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+build/arch/x86_64/binaries.o: src/arch/x86_64/binaries.asm
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'binaries'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 23):
+	mkdir -p $(dir $@) && \
+	nasm -f elf64 $(patsubst build/arch/x86_64/%.o, src/arch/x86_64/%.asm, $@) -o $@
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-13 01:05:32.979452391
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/kernel/impl/tty.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/arch/x86_64/boot/main.asm:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+build/arch/x86_64/boot/main.o: src/arch/x86_64/boot/main.asm
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'boot/main'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 23):
+	mkdir -p $(dir $@) && \
+	nasm -f elf64 $(patsubst build/arch/x86_64/%.o, src/arch/x86_64/%.asm, $@) -o $@
+
+# Not a target:
+ 
+src/arch/x86_64/boot/main32.asm:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+build-x86_64: build/kernel/kernel.o build/kernel/impl/io.o build/kernel/impl/tty.o build/kernel/impl/idt.o build/arch/x86_64/binaries.o build/arch/x86_64/boot/main64.o build/arch/x86_64/boot/header.o build/arch/x86_64/boot/main.o build/arch/x86_64/boot/main32.o
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 28):
+	mkdir -p dist/x86_64 && \
+	x86_64-elf-ld -n -o dist/x86_64/kernel.bin -T targets/x86_64/linker.ld $(kernel_object_files) $(x86_64_object_files) && \
+	cp dist/x86_64/kernel.bin targets/x86_64/iso/boot/kernel.bin && \
+	grub-mkrescue /usr/lib/grub/i386-pc -o dist/x86_64/kernel.iso targets/x86_64/iso
+
+build/kernel/impl/io.o: src/kernel/impl/io.c
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'impl/io'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 15):
+	mkdir -p $(dir $@) && \
+	x86_64-elf-gcc -c -I src/include/kernel -ffreestanding $(patsubst build/kernel/%.o, src/kernel/%.c, $@) -o $@
+
+build/arch/x86_64/boot/main64.o: src/arch/x86_64/boot/main64.asm
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'boot/main64'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 23):
+	mkdir -p $(dir $@) && \
+	nasm -f elf64 $(patsubst build/arch/x86_64/%.o, src/arch/x86_64/%.asm, $@) -o $@
+
+# Not a target:
+src/kernel/kernel.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+run:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 43):
+	qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso
+
+build: build/kernel/kernel.o build/kernel/impl/io.o build/kernel/impl/tty.o build/kernel/impl/idt.o build/arch/x86_64/binaries.o build/arch/x86_64/boot/main64.o build/arch/x86_64/boot/header.o build/arch/x86_64/boot/main.o build/arch/x86_64/boot/main32.o
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 34):
+	mkdir -p dist/x86_64 && \
+	x86_64-elf-ld -n -o dist/x86_64/kernel.bin -T targets/x86_64/linker.ld $(kernel_object_files) $(x86_64_object_files) && \
+	cp dist/x86_64/kernel.bin targets/x86_64/iso/boot/kernel.bin && \
+	grub-mkrescue /usr/lib/grub/i386-pc -o dist/x86_64/kernel.iso targets/x86_64/iso
+
+build/arch/x86_64/boot/header.o: src/arch/x86_64/boot/header.asm
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'boot/header'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 23):
+	mkdir -p $(dir $@) && \
+	nasm -f elf64 $(patsubst build/arch/x86_64/%.o, src/arch/x86_64/%.asm, $@) -o $@
+
+# Not a target:
+src/arch/x86_64/binaries.asm:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/kernel/impl/idt.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/kernel/impl/io.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+build/kernel/kernel.o: src/kernel/kernel.c
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'kernel'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 15):
+	mkdir -p $(dir $@) && \
+	x86_64-elf-gcc -c -I src/include/kernel -ffreestanding $(patsubst build/kernel/%.o, src/kernel/%.c, $@) -o $@
+
+# Not a target:
+src/arch/x86_64/boot/main64.asm:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+run-docker:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 40):
+	sudo docker run --rm -it -v "$(pwd)":/root/env projectapril
+
+build/kernel/impl/tty.o: src/kernel/impl/tty.c
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: 'impl/tty'
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 15):
+	mkdir -p $(dir $@) && \
+	x86_64-elf-gcc -c -I src/include/kernel -ffreestanding $(patsubst build/kernel/%.o, src/kernel/%.c, $@) -o $@
+
+.PHONY: build-x86_64 build
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=27/1024=3%, Rehash=0, Collisions=2/68=3%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 52 / storage = 822 B / avg = 15 B
+# current buf: size = 8162 B / used = 822 B / count = 52 / avg = 15 B
+
+# strcache performance: lookups = 91 / hit rate = 42%
+# hash-table stats:
+# Load=52/8192=1%, Rehash=0, Collisions=0/91=0%
+# Finished Make data base on Sun Mar 13 19:50:12 2022
+
+ 

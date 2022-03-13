@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/aryanj/Projects/AprilOS/AprilOS_Rev3'
+mkdir -p build/kernel/ && \
+x86_64-elf-gcc -c -I src/include/kernel -ffreestanding  src/kernel/kernel.c -o build/kernel/kernel.o
+make: Leaving directory '/home/aryanj/Projects/AprilOS/AprilOS_Rev3'
+ 
