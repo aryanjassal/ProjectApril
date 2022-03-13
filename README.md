@@ -50,6 +50,6 @@ make run
     - [x] Booting into the kernel
     - [x] Printing character to screen using assembly
     - [x] Entering 32 bit protected mode
-    - [ ] Entering 64 bit long mode
-    - [ ] Linking C/C++ code to assembly
+    - [x] Entering 64 bit long mode
+    - [x] Linking C/C++ code to assembly
     - [ ] Echoing user input to screen using assembly
