@@ -11,56 +11,21 @@ mov sp, bp        ; Move the current stack pointer to the base (stack is empty)
 mov si, INFO_WELCOME
 call bios_print
 
-; Load the second stage of the bootloader into the memory
-call read_disk
-
-; Prepare to enter 32-bit protected mode
-call fast_a20         ; Fast-enable the A20 line
-cli                   ; Clear BIOS interrupts
-
-; We need to first initialise the <ds> register before loading the GDT
-xor ax, ax            ; Basically the same as <mov ax, 0> but preferred for some reason
-mov ds, ax            ; Initialise <ds> register with a null value
-lgdt [gdt_desc]       ; Load the GDT descriptor table
-
-; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
-mov eax, cr0          ; We cannot directly modify the value of <cr0>, so first load it in the <eax> register
-or eax, 1             ; Then, set the first bit in the <eax> register
-mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <cr0>
-
-jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
-
-; Tell the compiler to compile the following instructions in 32-bit format
-[bits 32]
-clear_pipe:
-  ; Store the correct address in the segment registers
-  ; Refer here for the tutorial: http://www.osdever.net/tutorials/view/the-world-of-protected-mode
-  mov ax, DATASEG   ; Store the proper segment value in the <ax> register
-  mov ds, ax        ; Store proper value in the <ds> register (<ds> register stores variables)
-  mov ss, ax        ; Store proper value in the <ss> regsiter (<ss> register is the stack segment)
-  mov esp, 0x90000  ; Start the stack at memory address 0x90000 (refer to the memory address table in the aforementioned site)
-
-  jmp SECOND_STAGE
-  ; jmp $
-
 ; ---------------------------------------------
 ; Code after this point will not get executed
 ; Use it to make useful functions or variables
 ; ---------------------------------------------
 
-; Tell the compiler that the following code needs to be compiled in 16-bit mode
-[bits 16]
-
 ; The BIOS print routine
 bios_print:
-  pusha     ; Push the <a> registers because they will be used.
+  push ax         ; Push the <ax> register because it will be used.
 
   ; This method loops over all characters in a null-terminated string to print them.
   .__bios_print_loop:
     mov al, [si]            ; Move the next character into the <al> register.
     cmp al, 0               ; Check if <al> is 0 (null).
     jnz .__bios_print_char  ; If it is, then we have reached the end of the string. Prepare to exit the method.
-    popa                    ; Pop the pushed values for the <a> registers back, essentially restoring their value.
+    pop ax                  ; Pop the pushed values from the stack, restoring their value
     ret                     ; Safely return back to the memory address from where this function was called.
  
   ; This method prints a single character on the screen
@@ -70,7 +35,6 @@ bios_print:
     add si, 1               ; Add 1 to <si> to print the next character in the buffer
     jmp .__bios_print_loop  ; Jump back to the print loop to print the next character
 
-;! This method may be malfunctioning 
 ; This method reads a given number of sectors from the boot disk
 read_disk:
   mov ah, 0x02            ; Tell the BIOS we'll be reading the disk
@@ -92,7 +56,6 @@ read_disk_failed:
   mov si, ERROR_DISKREADERROR
   call bios_print
   jmp $
-
 
 ; This is a method to enable the A20 line required to access more than 1 MiB of memory
 fast_a20:
