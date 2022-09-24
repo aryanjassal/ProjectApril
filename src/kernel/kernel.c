@@ -1,11 +1,14 @@
-#include "tty.h"
+#include "console.h"
+#include "utils.h"
 
 void kernel_main() {
-  tty_set_colour(15, 1);
-  tty_clear();
-  tty_print_string("Hello, world!\n");
-  tty_print_string("Welcome to my C kernel!\n");
-  tty_print_string("Welcome to Project April rev.20220826-prealpha\n");
+  // Test out various screen features and print basic debug information
+  console_set_cursor_position(0, 0);
+  console_set_colour(VGA_COLOUR_WHITE, VGA_COLOUR_BLACK);
+  console_clear();
+  console_print_string("Hello, world!\n");
+  console_print_string("Welcome to my C kernel!\n");
 
-  while(1) {}
+  // Halt the kernel when it reaches end of execution because it should normally never happen
+  for(;;);
 }
