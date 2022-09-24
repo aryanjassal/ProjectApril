@@ -11,10 +11,48 @@ mov sp, bp        ; Move the current stack pointer to the base (stack is empty)
 mov si, INFO_WELCOME
 call bios_print
 
+; Load the second stage of the bootloader into the memory
+call read_disk
+
+; Prepare to enter 32-bit protected mode
+call fast_a20         ; Fast-enable the A20 line
+cli                   ; Clear BIOS interrupts
+
+; We need to first initialise the <ds> register before loading the GDT
+xor ax, ax            ; Basically the same as <mov ax, 0> but preferred for some reason
+mov ds, ax            ; Initialise <ds> register with a null value
+lgdt [gdt_desc]       ; Load the Global Descriptor Table
+
+; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
+mov eax, cr0          ; We cannot directly modify the value of <cr0>, so first load it in the <eax> register
+or eax, 1             ; Then, set the first bit in the <eax> register
+mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <cr0>
+
+jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
+
+; Tell the compiler to compile the following instructions in 32-bit format
+[bits 32]
+clear_pipe:
+  ; Store the correct address in the segment registers
+  ; Refer here for the tutorial: http://www.osdever.net/tutorials/view/the-world-of-protected-mode
+  mov ax, DATASEG   ; Store the proper segment value in the <ax> register
+  mov ds, ax        ; Store proper value in the <ds> register (<ds> register stores variables)
+  mov ss, ax        ; Store proper value in the <ss> regsiter (<ss> register is the stack segment)
+  mov esp, 0x90000  ; Start the stack at memory address 0x90000 (refer to the memory address table in the aforementioned site)
+
+  ; ; Load the Interrupt Descriptor Table
+  ; lidt [idt_desc]
+
+  ; Jump to the second stage of the bootloader
+  jmp SECOND_STAGE
+
 ; ---------------------------------------------
 ; Code after this point will not get executed
 ; Use it to make useful functions or variables
 ; ---------------------------------------------
+
+; Tell the compiler that the following code needs to be compiled in 16-bit mode
+[BITS 16]
 
 ; The BIOS print routine
 bios_print:
@@ -65,7 +103,7 @@ fast_a20:
   ret
 
 ; Set up the GDT table
-gdt:
+gdt_table:
   ; The first entry in the GDT should always be null
   gdt_null:
     dq 0
@@ -98,14 +136,33 @@ gdt:
 gdt_end:
 
 ; The actual GDT descriptor table
-; For some reason, this does not coincide with the table given on both osdever and osdev wiki site but is the code from osdever site
 gdt_desc:
-  dw gdt_end - gdt - 1    ; This is the total size of the GDT table minus 1 as per the requirements
-  dd gdt
+  dw gdt_end - gdt_table - 1    ; This is the total size of the GDT table minus 1 as per the requirements
+  dd gdt_table
 
 ; Declaring useful GDT variables
 CODESEG equ gdt_code - gdt_null
 DATASEG equ gdt_data - gdt_null
+
+; ; Set up the IDT table
+; idt_table:
+;   ; This defines an IDT entry for 32-bit protected mode
+;   ; Refer to https://wiki.osdev.org/Interrupt_Descriptor_Table
+;   ; Another useful link: https://stackoverflow.com/questions/34561275/setting-up-interrupts-in-protected-mode-x86
+;   idt_entry:
+;     dw 0x00       ; The interrupt handlers are located at the absolute memory address of 0x00
+;     dw CODESEG    ; The pointer to the code segment in the GDT (why does this even exist?)
+;     db 00000000b  ; Reserved
+;     db 11100001b  ; Setting appropriate flags (refer to the table in the osdev wiki link)
+;     dw 0x00       ; Setting the high part of the offset
+  
+; ; This is where the IDT table description ends. Useful for size calculation during compile time.
+; idt_end:
+
+; ; The actual IDT descriptor table
+; idt_desc:
+;   dw idt_end - idt_table - 1    ; This is the total size of the GDT table minus 1 as per the requirements
+;   dd idt_table
 
 ; Declaring strings that may or may not be used by the code later
 INFO_WELCOME db "Welcome to AprilOS!", 13, 10, 0
