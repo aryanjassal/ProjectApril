@@ -1,8 +1,9 @@
 #include "utils.h"
 #include <stdint.h>
+#include <stddef.h>
 
 // Reverse the contents of a string
-void *strrev(char str[], int length) {
+void *strrev(char *str, int length) {
   // Declare some variables that will be useful in the reversal
   int start = 0;
   int end = length - 1;
@@ -18,6 +19,37 @@ void *strrev(char str[], int length) {
     start++;
     end--;
   }
+
+  // Return statement to keep the compiler happy
+  return NULL;
+}
+
+// Returns the length of the string provided
+uint16_t strlen(const char *str) {
+  uint16_t len = 0;
+  
+  while (*str != '\0') {
+    len++;
+    str++;
+  }
+  return len;
+}
+
+// Appends the source string to the destination string
+char *strcat(char *destination, const char* source) {
+  // char *ptr = destination + strlen(destination);
+  // How ugly
+  // TODO: make a better and more elegant looking solution
+  uint32_t i = 0, j = 0;
+  for (; destination[i] != '\0'; i++);
+
+  for (; source[j] != 0; j++) {
+    destination[i + j] = source[j];
+  }
+
+  // Null-terminate the string
+  destination[i + j] = '\0';
+  return destination;
 }
 
 // Convert a decimal integer into a number of an arbitrary base
@@ -57,4 +89,12 @@ void *memset(void *dest, uint8_t val, uint32_t count) {
   for (uint32_t i = 0; i < count; i++) {
     *actual_dest++ = val;
   }
+
+  // Return statement to keep the compiler happy
+  return NULL;
+}
+
+// Permanently halt the computer
+void halt() {
+  for(;;);
 }

@@ -1,6 +1,5 @@
-#include "io.h"
-
 #include <stdint.h>
+#include "io/io.h"
 
 // Output a byte to the given port using inline assembly
 void outb(uint16_t port, uint8_t val) {

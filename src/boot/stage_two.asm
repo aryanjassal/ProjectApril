@@ -1,3 +1,6 @@
+; TODO: Get this system working in the assembly version
+; TODO: Optimise assembly for faster speed and potentially smaller binary size
+
 ; Provide the _start symbol globally so the linker doesn't complain
 [global _start]
 ; Include the external C kernel file
@@ -125,6 +128,6 @@ vclear:
   ret                 ; Return from the function
 
 ; Declaring strings
-INFO_PROTECTEDMODE db "[INFO] successfully entered 32-bit protected mode", 13, 10, 0
-ERROR_KERNELRETURNED db "[ERROR] kernel returned unexpectedly", 13, 10, 0
+INFO_PROTECTEDMODE db "[INFO] Successfully entered 32-bit protected mode", 13, 10, 0
+ERROR_KERNELRETURNED db "[ERROR] Kernel returned unexpectedly", 13, 10, 0
 VGA_NEWLINE db 13, 10, 0

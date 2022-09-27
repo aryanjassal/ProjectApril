@@ -17,12 +17,11 @@
 #define ICW4_AUTO       0x02      // Auto (normal) EOI
 // #define ICW4_BUF_SLAVE  0x08      // Buffered mode slave
 // #define ICW4_BUF_MASTER 0x0c      // Buffered mode master
-// #define ICW4_SFNM       0x10      // Special fully-nested (not) (??)
 
-#define PIC_EOI         0x20
+// #define PIC_EOI         0x20
 
 // Remap the PIC
 void pic_remap(int offset_master, int offset_slave);
 
 // Send the EOI (End Of Interrupt) command to the PIC
-void pic_send_eoi(unsigned char irq);
+// void pic_send_eoi(unsigned char irq);

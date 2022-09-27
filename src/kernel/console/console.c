@@ -1,5 +1,5 @@
-#include "console.h"
-#include "io.h"
+#include "console/console.h"
+#include "io/io.h"
 #include <stdint.h>
 
 // Create a struct to store the character information as per VGA console requirements

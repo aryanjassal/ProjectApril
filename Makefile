@@ -1,5 +1,5 @@
-BOOTLOADER_SRC_DIR := src/bootloader
-BOOTLOADER_BUILD_DIR := dist/bootloader
+BOOTLOADER_SRC_DIR := src/boot
+BOOTLOADER_BUILD_DIR := dist/boot
 
 KERNEL_SRC_DIR := src/kernel
 INCLUDE_DIR := src/include
@@ -12,7 +12,7 @@ BOOTLOADER_OBJECT_FILES := $(patsubst $(BOOTLOADER_SRC_DIR)/%.asm, $(BOOTLOADER_
 KERNEL_C_SRC_FILES := $(shell find $(KERNEL_SRC_DIR) -name "*.c")
 KERNEL_ASM_SRC_FILES := $(shell find $(KERNEL_SRC_DIR) -name "*.asm")
 KERNEL_C_OBJECT_FILES := $(patsubst $(KERNEL_SRC_DIR)/%.c, $(KERNEL_BUILD_DIR)/%.o, $(KERNEL_C_SRC_FILES))
-KERNEL_ASM_OBJECT_FILES := $(patsubst $(KERNEL_SRC_DIR)/%.asm, $(KERNEL_BUILD_DIR)/%.o, $(KERNEL_ASM_SRC_FILES))
+KERNEL_ASM_OBJECT_FILES := $(patsubst $(KERNEL_SRC_DIR)/%.asm, $(KERNEL_BUILD_DIR)/%.asmo, $(KERNEL_ASM_SRC_FILES))
 
 BOOTLOADER_OUTPUT_BIN := dist/bootloader.bin
 KERNEL_OUTPUT_BIN := dist/kernel.bin
@@ -57,6 +57,6 @@ $(KERNEL_C_OBJECT_FILES): $(KERNEL_BUILD_DIR)/%.o : $(KERNEL_SRC_DIR)/%.c
 	$(MKDIR) $(dir $@)
 	$(GCC) $(GCCFLAGS) $(patsubst $(KERNEL_BUILD_DIR)/%.o, $(KERNEL_SRC_DIR)/%.c, $@) -o $@
 
-$(KERNEL_ASM_OBJECT_FILES): $(KERNEL_BUILD_DIR)/%.o : $(KERNEL_SRC_DIR)/%.asm
+$(KERNEL_ASM_OBJECT_FILES): $(KERNEL_BUILD_DIR)/%.asmo : $(KERNEL_SRC_DIR)/%.asm
 	$(MKDIR) $(dir $@)
-	$(ASMC) $(ASMFLAGS) -f elf32 $(patsubst $(KERNEL_BUILD_DIR)/%.o, $(KERNEL_SRC_DIR)/%.asm, $@) -o $@
+	$(ASMC) $(ASMFLAGS) -f elf32 $(patsubst $(KERNEL_BUILD_DIR)/%.asmo, $(KERNEL_SRC_DIR)/%.asm, $@) -o $@
