@@ -53,31 +53,38 @@ char *strcat(char *destination, const char* source) {
 }
 
 // Convert a decimal integer into a number of an arbitrary base
-char *itoa(int num, char *str, int base) {
+char *itoa(int num, char *buf, int base) {
   int i = 0;
 
   // Handle 0 explicitly
   if (num == 0) {
-    str[i++] = '0';
-    str[i] = '\0';
-    return str;
+    buf[i++] = '0';
+    buf[i] = '\0';
+    return buf;
   }
 
   // Process individual digits
   while (num != 0) {
     int rem = num % base;
-    str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+    buf[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
     num /= base;
   }
 
   // Reverse the string (because the digits are processed in reverse order)
-  strrev(str, i);
+  strrev(buf, i);
 
   // Append the null terminator at the end of the string
-  str[i] = '\0';
+  buf[i] = '\0';
 
   // Return the properly reversed, null terminated string
-  return str;
+  return buf;
+}
+
+// Convert an unsigned decimal base 10 integer into a string
+char *uintstr(uint32_t num) {
+  static char buf[15];
+  itoa(num, buf, 10);
+  return buf;
 }
 
 // Fill a block of memory with a particular data
