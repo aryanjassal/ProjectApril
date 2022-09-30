@@ -75,7 +75,7 @@ void idt_set_gate(uint8_t num, uint32_t base, uint8_t segment_selector, uint8_t 
   // char buf[255];
   // char intbuf[255];
   // strcat(buf, "Installing IDT Handler #");
-  // strcat(buf, itoa(num, intbuf, 10));
+  // strcat(buf, utoa(num, intbuf, 10));
 
   // kinfo(buf);
 

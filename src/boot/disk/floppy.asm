@@ -40,6 +40,6 @@ read_disk_failed:
 ; Use it to make useful functions or variables
 ; ---------------------------------------------
 
-ERROR_DISKREADERROR db "Disk not found.", 0
+ERROR_DISKREADERROR db "DISK NOT FOUND", 0
 
 %include "console/bios_print.asm"

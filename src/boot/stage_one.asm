@@ -1,4 +1,4 @@
-[org 0x7c00]        ; Set the origin of the bootloader
+[ORG 0x7c00]        ; Set the origin of the bootloader
 
 ; Move the boot disk into a variable which will be used when reading from disk
 mov [BOOT_DISK], dl       ; Store the boot disk for later use
@@ -27,7 +27,7 @@ mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <c
 jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
 
 ; Tell the compiler to compile the following instructions in 32-bit format
-[bits 32]
+[BITS 32]
 clear_pipe:
   ; Store the correct address in the segment registers
   ; Refer here for the tutorial: http://www.osdever.net/tutorials/view/the-world-of-protected-mode

@@ -1,44 +1,34 @@
-; Provide the _start symbol globally so the linker doesn't complain
-[global _start]
-; Include the external C kernel main method
-[extern kernel_main]
-; Compile this file with the 32-bit instruction set
-[bits 32]
-; This start label is here just to tell the linker where the executable code startes from
+[BITS 32]
+
+; Externs to  C kernel functions
+[EXTERN kmain]
+[EXTERN kclear]
+[EXTERN kinfo]
+[EXTERN kwarn]
+[EXTERN kerror]
+
+[GLOBAL _start]
 _start:
-  ; Move the VGA buffer to <ebx>
-  mov ebx, 0xb8000
+  call kclear
 
-  call vclear
+  ; A20 will always be enabled by the first stage for us
+  push MSG_A20_ENABLED
+  call kinfo
 
-  mov si, MSG_A20_ENABLED
-  call vprintok
+  ; We will also be in protected mode by default in the second stage
+  push MSG_PROTECTEDMODE
+  call kinfo
 
-  ; Print the [INFO] <message>
-  mov dl, 0x09
-  mov si, INFO
-  call vprint
-  mov dl, 0x0f
-  mov si, MSG_PROTECTEDMODE
-  call vprint
+  ; Go to the higher-level C kernel
+  call kmain
 
-  mov dl, 0x09
-  mov si, INFO
-  call vprint
-  mov dl, 0x0f
-  mov si, MSG_CALLINGKERNEL
-  call vprint
-
-  call kernel_main
-
-  ; This code should never be called. If this code is executing, it means that the kernel unexpectedly returned.
-  ; In that case, print an error message to the user and halt program execution
-  mov dl, 0x0c
-  mov si, ERROR
-  call vprint
-  mov dl, 0x0f
-  mov si, MSG_KERNELRETURNED
-  call vprint
+  ; -------------------------------------------------
+  ; The code below this line should never be called.
+  ; It means that the kernel returned unexpectedly.
+  ; So, print the user an error message and halt.
+  ; -------------------------------------------------
+  push MSG_KERNELRETURNED
+  call kerror
   jmp $
 
 ; ---------------------------------------------
@@ -46,10 +36,7 @@ _start:
 ; Use it to make useful functions or variables
 ; ---------------------------------------------
 
-%include "console/vga_print.asm"
-
 ; Declaring strings
-MSG_A20_ENABLED db "A20 line enabled", 13, 10, 0
-MSG_PROTECTEDMODE db "Successfully entered 32-bit protected mode", 13, 10, 0
-MSG_CALLINGKERNEL db "Jumping to C kernel...", 13, 10, 0
-MSG_KERNELRETURNED db "Kernel returned unexpectedly", 13, 10, 0
+MSG_A20_ENABLED     db "A20 line enabled", 0
+MSG_PROTECTEDMODE   db "Successfully entered protected mode", 0
+MSG_KERNELRETURNED  db "Kernel returned unexpectedly", 0

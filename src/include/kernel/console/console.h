@@ -1,15 +1,12 @@
-#ifndef __CONSOLE_H__
-#define __CONSOLE_H__
+#pragma once
 
 // Include files that declare the uint_t and struct implementations
 #include <stddef.h>
 #include <stdint.h>
 
 // Define the maximum number of lines and cells that the VGA console can have in default text mode
-// #define VGA_CELLS 80
-// #define VGA_LINES 25
-static const uint8_t VGA_CELLS = 80;
-static const uint8_t VGA_LINES = 25;
+#define VGA_CELLS 80
+#define VGA_LINES 25
 
 // Define default VGA console colours
 #define VGA_COLOUR_BLACK        0
@@ -60,10 +57,10 @@ void kputs(char *str);
 // // !NOT IMPLEMENTED!
 // void kputui(uint32_t num);
 
+//? kok could be redundant
+// void kok(char *str);
+
 // Logging utilities to print [OK] [INFO] [WARN] and [ERROR] messages
-void kok(char *str);
 void kinfo(char *str);
 void kwarn(char *str);
 void kerror(char *str);
-
-#endif

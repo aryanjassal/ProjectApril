@@ -7,7 +7,7 @@
 static vgachar_t *vgamem = (vgachar_t *)0xb8000;
 
 // Create a new console, which stores information about the current terminal
-vgaconsole_t console = { 2, 0, 0x0f };
+vgaconsole_t console = { 0, 0, 0x0f };
 
 // Sets the cursor position to the specified coordinates
 void kset_cursor(uint8_t x, uint8_t y) {
@@ -78,10 +78,37 @@ void kputs(char *str) {
   }
 }
 
-// Logging uitilities
+// Logging utility to print [OK] messages
 void kok(char *str) {
   console.colour = 0x0a;
   kputs("[OK]    ");
+  console.colour = 0x0f;
+  kputs(str);
+  kputc('\n');
+}
+
+// Logging utility to print [INFO] messages
+void kinfo(char *str) {
+  console.colour = 0x09;
+  kputs("[INFO]  ");
+  console.colour = 0x0f;
+  kputs(str);
+  kputc('\n');
+}
+
+// Logging utility to print [WARN] messages
+void kwarn(char *str) {
+  console.colour = 0x0e;
+  kputs("[WARN]  ");
+  console.colour = 0x0f;
+  kputs(str);
+  kputc('\n');
+}
+
+// Logging utility to print [ERROR] messages
+void kerror(char *str) {
+  console.colour = 0x0c;
+  kputs("[ERROR] ");
   console.colour = 0x0f;
   kputs(str);
   kputc('\n');
