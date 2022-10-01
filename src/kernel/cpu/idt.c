@@ -1,6 +1,6 @@
 #include "console/console.h"
 #include "cpu/idt.h"
-#include "utils.h"
+#include "mem.h"
 
 // Link external assembly code implementation
 extern void asm_load_idt();
