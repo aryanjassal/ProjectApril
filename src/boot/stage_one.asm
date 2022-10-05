@@ -1,4 +1,6 @@
 [ORG 0x7c00]        ; Set the origin of the bootloader
+; TODO: Perform a far-jump to set the CS:IP registers properly
+; Refer here https://wiki.osdev.org/My_Bootloader_Does_Not_Work#You_are_assuming_a_wrong_CS:IP_value
 
 ; Move the boot disk into a variable which will be used when reading from disk
 mov [BOOT_DISK], dl       ; Store the boot disk for later use
@@ -9,13 +11,15 @@ mov sp, bp        ; Move the current stack pointer to the base (stack is empty)
 
 ; Load the second stage of the bootloader into the memory
 ; TODO: state number of sectors to be read
+; TODO: first try hard drive then try floppy
 call read_disk
 
 ; Prepare to enter 32-bit protected mode
-cli                   ; Clear BIOS interrupts
+; cli                   ; Clear BIOS interrupts
+sti
 
 ; We need to first initialise the <ds> register before loading the GDT
-xor ax, ax            ; Basically the same as <mov ax, 0> but preferred for some reason
+xor ax, ax            ; Basically the same as <mov ax, 0>, but faster
 mov ds, ax            ; Initialise <ds> register with a null value
 lgdt [gdt_desc]       ; Load the Global Descriptor Table
 
@@ -36,12 +40,17 @@ clear_pipe:
   mov ss, ax        ; Store proper value in the <ss> regsiter (<ss> register is the stack segment)
   mov esp, 0x90000  ; Start the stack at memory address 0x90000 (refer to the memory address table in the aforementioned site)
 
-  call check_a20
-  je .__boot_a20_enabled
+  ; call check_a20
+  ; je .__boot_a20_enabled
 
   call fast_a20
-  call check_a20
-  je .__boot_a20_enabled
+  ; call check_a20
+  ; je .__boot_a20_enabled
+
+  ; Halt indefinitely if A20 line cannot be enabled
+  ; TODO: Print an actual error message to the user
+  ; TODO: Make this concept actually work
+  ; jmp $
   
   .__boot_a20_enabled:
     ; Jump to the second stage of the bootloader

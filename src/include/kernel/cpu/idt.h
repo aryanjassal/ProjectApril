@@ -6,66 +6,77 @@
 #define IDT_MAX_SIZE    256
 #define GDT_CODE        0x08
 
-// Externs for low-level interrupt handlers
-void reserved_handler(void);
-void divide_error_handler(void);
-void debug_interrupt_handler(void);
-void nmi_handler(void);
-void breakpoint_handler(void);
-void overflow_handler(void);
-void bound_exceeded_handler(void);
-void undefined_opcode_handler(void);
-void device_not_available_handler(void);
-void double_fault_handler(void);
-void coprocessor_segment_overrun_handler(void);
-void invalid_tss_handler(void);
-void segment_not_present_handler(void);
-void stack_segment_fault_handler(void);
-void general_protection_fault_handler(void);
-void page_fault_handler(void);
-// --- ---------------------- (RESERVED)
-void math_fault_handler(void);
-void alignment_check_handler(void);
-void machine_check_handler(void);
-void floating_point_exception_handler(void);
-void virtualisation_exception_handler(void);
-void control_protection_exception_handler(void);
+// Link external assembly code implementation
+extern void idt_load(uint32_t idt_ptr);
 
-// C code to handle interrupts
-void c_reserved_handler();
-void c_divide_error_handler();
-void c_debug_interrupt_handler();
-void c_nmi_handler();
-void c_breakpoint_handler();
-void c_overflow_handler();
-void c_bound_exceeded_handler();
-void c_undefined_opcode_handler();
-void c_device_not_available_handler();
-void c_double_fault_handler();
-void c_coprocessor_segment_overrun_handler();
-void c_invalid_tss_handler();
-void c_segment_not_present_handler();
-void c_stack_segment_fault_handler();
-void c_general_protection_fault_handler();
-void c_page_fault_handler();
-void c_math_fault_handler();
-void c_alignment_check_handler();
-void c_machine_check_handler();
-void c_floating_point_exception_handler();
-void c_virtualisation_exception_handler();
-void c_control_protection_exception_handler();
+// Define the struct to store the individual IDT entries
+typedef struct idt_entry_t {
+  uint16_t base_low;
+  uint16_t segment_selector;
+  uint8_t reserved;
+  uint8_t flags;
+  uint16_t base_high;
+} __attribute__((packed))
+idt_entry_t;
 
-// Loads the interrupt descriptor table
-void idt_load();
+// Define the struct that will actually install the IDT
+typedef struct idt_descriptor_t {
+  uint16_t limit;
+  uint32_t base;
+} __attribute__((packed))
+idt_descriptor_t;
+
+// Define a struct that will store the format of the pushed registers
+typedef struct isr_registers_t {
+  uint32_t ds;
+  uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+  uint32_t int_num, err_code;
+  // Intel manual says to use this method but...
+  uint32_t eip, cs, eflags;
+  // James Molly's tutorial says to use this format
+  // uint32_t eip, cs, eflags, user_esp, ss;
+} __attribute__((packed))
+isr_registers_t;
+
+// void isr_handler(isr_registers_t registers);
+void isr_handler();
+
+// Externs for the software interrupt handlers
+extern void isr0();
+extern void isr1();
+extern void isr2();
+extern void isr3();
+extern void isr4();
+extern void isr5();
+extern void isr6();
+extern void isr7();
+extern void isr8();
+extern void isr9();
+extern void isr10();
+extern void isr11();
+extern void isr12();
+extern void isr13();
+extern void isr14();
+extern void isr15();
+extern void isr16();
+extern void isr17();
+extern void isr18();
+extern void isr19();
+extern void isr20();
+extern void isr21();
+extern void isr22();
+extern void isr23();
+extern void isr24();
+extern void isr25();
+extern void isr26();
+extern void isr27();
+extern void isr28();
+extern void isr29();
+extern void isr30();
+extern void isr31();
 
 // Initialises the first 32 entries within the IDT in accordance to Intel's specifications
 void idt_init();
 
-// Set a new entry in the IDT table
-// void idt_set_gate(uint8_t num, uint32_t base, uint8_t segment_selector, uint8_t flags);
-
 // Simplified setting up a new interrupt gate
-void set_interrupt_gate(uint8_t num, uint32_t handler);
-
-// Simplified setting up a new trap gate
-// void set_trap_gate(uint8_t num, uint32_t handler);
+void set_interrupt_gate(uint8_t num, void *handler);

@@ -1,161 +1,88 @@
 #include "console/console.h"
 #include "cpu/idt.h"
+#include "io/string.h"
 #include "mem.h"
-
-// Link external assembly code implementation
-extern void asm_load_idt();
-
-// Define the struct to store the individual IDT entries
-struct IDT_ENTRY {
-  uint16_t base_low;
-  uint16_t segment_selector;
-  uint8_t reserved;
-  uint8_t flags;
-  uint16_t base_high;
-} __attribute__((packed));
-
-// Define the struct that will actually install the IDT
-struct IDT_DESCRIPTOR {
-  uint16_t limit;
-  uint32_t base;
-} __attribute__((packed));
+#include "utils.h"
 
 // Declare IDT variables
-struct IDT_ENTRY idt[IDT_MAX_SIZE];
-struct IDT_DESCRIPTOR idt_descriptor;
-
-// Loads the interrupt descriptor table
-void idt_load() {
-  // Set the actual table parameters up
-  idt_descriptor.limit = (sizeof (struct IDT_ENTRY) * 256) - 1;
-  idt_descriptor.base = (uint32_t) &idt;
-
-  // Clear out the interrupt table, setting it all to zeroes
-  memset(&idt, 0, sizeof(struct IDT_ENTRY) * 356);
-
-  // Call the assembly code to install the IDT
-  asm_load_idt();
-}
+idt_entry_t idt[IDT_MAX_SIZE];
+idt_descriptor_t idt_descriptor;
 
 // Initialise the Interrupt Descriptor Table
 void idt_init() {
-  idt_load();
+  // Set the actual table parameters up
+  idt_descriptor.limit = (sizeof (struct idt_entry_t) * IDT_MAX_SIZE) - 1;
+  idt_descriptor.base = (uint32_t) &idt;
 
-  set_interrupt_gate(0, (uint32_t)&divide_error_handler);
-  set_interrupt_gate(1, (uint32_t)&debug_interrupt_handler);
-  set_interrupt_gate(2, (uint32_t)&nmi_handler);
-  set_interrupt_gate(3, (uint32_t)&breakpoint_handler);
-  set_interrupt_gate(4, (uint32_t)&overflow_handler);
-  set_interrupt_gate(5, (uint32_t)&bound_exceeded_handler);
-  set_interrupt_gate(6, (uint32_t)&undefined_opcode_handler);
-  set_interrupt_gate(7, (uint32_t)&device_not_available_handler);
-  set_interrupt_gate(8, (uint32_t)&double_fault_handler);
-  set_interrupt_gate(9, (uint32_t)&coprocessor_segment_overrun_handler);
-  set_interrupt_gate(10, (uint32_t)&invalid_tss_handler);
-  set_interrupt_gate(11, (uint32_t)&segment_not_present_handler);
-  set_interrupt_gate(12, (uint32_t)&stack_segment_fault_handler);
-  set_interrupt_gate(13, (uint32_t)&general_protection_fault_handler);
-  set_interrupt_gate(14, (uint32_t)&page_fault_handler);
-  set_interrupt_gate(15, (uint32_t)&reserved_handler);
-  set_interrupt_gate(16, (uint32_t)&math_fault_handler);
-  set_interrupt_gate(17, (uint32_t)&alignment_check_handler);
-  set_interrupt_gate(18, (uint32_t)&machine_check_handler);
-  set_interrupt_gate(19, (uint32_t)&floating_point_exception_handler);
-  set_interrupt_gate(20, (uint32_t)&virtualisation_exception_handler);
-  set_interrupt_gate(21, (uint32_t)&control_protection_exception_handler);
+  // Clear out the interrupt table, setting it all to zeroes
+  memset(&idt, 0, sizeof(idt_entry_t) * IDT_MAX_SIZE);
 
-  for (int i = 22; i < 32; i++) {
-    set_interrupt_gate(i, (uint32_t)&reserved_handler);
-  }
+  set_interrupt_gate(0, isr0);
+  set_interrupt_gate(1, isr1);
+  set_interrupt_gate(2, isr2);
+  set_interrupt_gate(3, isr3);
+  set_interrupt_gate(4, isr4);
+  set_interrupt_gate(5, isr5);
+  set_interrupt_gate(6, isr6);
+  set_interrupt_gate(7, isr7);
+  set_interrupt_gate(8, isr8);
+  set_interrupt_gate(9, isr9);
+  set_interrupt_gate(10, isr10);
+  set_interrupt_gate(11, isr11);
+  set_interrupt_gate(12, isr12);
+  set_interrupt_gate(13, isr13);
+  set_interrupt_gate(14, isr14);
+  set_interrupt_gate(15, isr15);
+  set_interrupt_gate(16, isr16);
+  set_interrupt_gate(17, isr17);
+  set_interrupt_gate(18, isr18);
+  set_interrupt_gate(19, isr19);
+  set_interrupt_gate(20, isr20);
+  set_interrupt_gate(21, isr21);
+  set_interrupt_gate(22, isr22);
+  set_interrupt_gate(23, isr23);
+  set_interrupt_gate(24, isr24);
+  set_interrupt_gate(25, isr25);
+  set_interrupt_gate(26, isr26);
+  set_interrupt_gate(27, isr27);
+  set_interrupt_gate(28, isr28);
+  set_interrupt_gate(29, isr29);
+  set_interrupt_gate(30, isr30);
+  set_interrupt_gate(31, isr31);
+
+  idt_load((uint32_t) &idt_descriptor);
+  asm("sti");
+  asm("int $3");
+}
+
+// void isr_handler(isr_registers_t registers) {
+void isr_handler() {
+  kputs("Unhandled interrupt: ");
+  // char buf[4];
+  // kputs(utoa(registers.int_num, buf, 10));
+  // kputc('\n');
 }
 
 // Install a new entry in the IDT table
-void idt_set_gate(uint8_t num, uint32_t base, uint8_t segment_selector, uint8_t flags) {
+void idt_set_gate(uint8_t num, void *base, uint8_t flags) {
   // // Print debug info to the user
-  // char buf[255];
-  // char intbuf[255];
-  // strcat(buf, "Installing IDT Handler #");
-  // strcat(buf, utoa(num, intbuf, 10));
+  // char buf[4];
+  // kputs("Installing IDT Handler #");
+  // kputs(utoa(num, buf, 10));
+  // kputc('\n');
 
-  // kinfo(buf);
+  uint32_t isr = (uint32_t) base;
 
   // Set the corresponding IDT data for the entry
-  idt[num].base_low = (base & 0xffff);
-  idt[num].base_high = ((base >> 16) & 0xffff);
-  idt[num].segment_selector = segment_selector;
+  // NOTE: You cannot change the segment selector as of yet
+  idt[num].base_low = isr & 0xffff;
+  idt[num].base_high = (isr >> 16) & 0xffff;
+  idt[num].segment_selector = GDT_CODE;
   idt[num].reserved = 0;
   idt[num].flags = flags;
 }
 
 // Simplified setting up a new interrupt gate
-void set_interrupt_gate(uint8_t num, uint32_t handler) {
-  idt_set_gate(num, handler, GDT_CODE, 0b10001110);
-}
-
-// C code to handle interrupts
-void c_reserved_handler() {
-  // kputs("[INTERRUPT] RESERVED");
-}
-void c_divide_error_handler() {
-  // kputs("[INTERRUPT] DIVIDE ERROR");
-}
-void c_debug_interrupt_handler() {
-  // kputs("[INTERRUPT] DEBUG INTERRUPT");
-}
-void c_nmi_handler() {
-  // kputs("[INTERRUPT] NMI");
-}
-void c_breakpoint_handler() {
-  // kputs("[INTERRUPT] BREAKPOINT");
-}
-void c_overflow_handler() {
-  // kputs("[INTERRUPT] OVERFLOW");
-}
-void c_bound_exceeded_handler() {
-  // kputs("[INTERRUPT] BOUND EXCEEDED");
-}
-void c_undefined_opcode_handler() {
-  // kputs("[INTERRUPT] UNDEFINED OPCODE");
-}
-void c_device_not_available_handler() {
-  // kputs("[INTERRUPT] DEVICE NOT AVAILABLE");
-}
-void c_double_fault_handler() {
-  // kputs("[INTERRUPT] DOUBLE FAULT");
-}
-void c_coprocessor_segment_overrun_handler() {
-  // kputs("[INTERRUPT] COPROCESSOR SEGMENT OVERRUN");
-}
-void c_invalid_tss_handler() {
-  // kputs("[INTERRUPT] INVALID TSS");
-}
-void c_segment_not_present_handler() {
-  // kputs("[INTERRUPT] SEGMENT NOT PRESENT");
-}
-void c_stack_segment_fault_handler() {
-  // kputs("[INTERRUPT] STACK SEGMENT FAULT");
-}
-void c_general_protection_fault_handler() {
-  // kputs("[INTERRUPT] GENERAL PROTECTION FAULT");
-}
-void c_page_fault_handler() {
-  // kputs("[INTERRUPT] PAGE FAULT");
-}
-void c_math_fault_handler() {
-  // kputs("[INTERRUPT] MATH FAULT");
-}
-void c_alignment_check_handler() {
-  // kputs("[INTERRUPT] ALIGNMENT CHECK INTERRUPT");
-}
-void c_machine_check_handler() {
-  // kputs("[INTERRUPT] MACHINE CHECK INTERRUPT");
-}
-void c_floating_point_exception_handler() {
-  // kputs("[INTERRUPT] FLOATING POINT EXCEPTION");
-}
-void c_virtualisation_exception_handler() {
-  // kputs("[INTERRUPT] VIRTUALISATION EXCEPTION");
-}
-void c_control_protection_exception_handler() {
-  // kputs("[INTERRUPT] CONTROL PROTECTION EXCEPTION");
+void set_interrupt_gate(uint8_t num, void *handler) {
+  idt_set_gate(num, handler, 0b10001110);
 }

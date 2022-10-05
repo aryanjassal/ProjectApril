@@ -8,9 +8,9 @@
 // There is no need to add io_wait() because we are interleaving between PIC1 and PIC2
 void pic_remap(int offset_master, int offset_slave) {
   // Save the mask status of the PIC to restore later
-  uint8_t mask1, mask2;
-  mask1 = inb(PIC1_DATA);
-  mask2 = inb(PIC2_DATA);
+  // uint8_t mask1, mask2;
+  // mask1 = inb(PIC1_DATA);
+  // mask2 = inb(PIC2_DATA);
 
   // [ICW1] Send the initialize command to the PICs
   outb(PIC1_COMMAND, ICW1_INIT);
@@ -29,8 +29,8 @@ void pic_remap(int offset_master, int offset_slave) {
   outb(PIC2_DATA, ICW4_8086);
 
   // Restore saved mask status of the PICs
-  outb(PIC1_DATA, mask1);
-  outb(PIC2_DATA, mask2);
+  outb(PIC1_DATA, 0x00);
+  outb(PIC2_DATA, 0x00);
 }
 
 // Send the interrupt acknowledged (EOI) command to the PICs

@@ -4,5 +4,8 @@
 
 // Permanently halt the computer
 void halt() {
-  for(;;);
+  asm("cli");
+  for(;;) {
+    asm("hlt");
+  }
 }

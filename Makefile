@@ -29,7 +29,7 @@ GCC := @gcc
 CLEAR := @clear
 
 ASMFLAGS := -I $(BOOTLOADER_SRC_DIR)
-QEMUFLAGS := -drive file=$(OUTPUT_BIN),if=floppy,index=0,media=disk,format=raw -no-reboot
+QEMUFLAGS := -drive file=$(OUTPUT_BIN),if=floppy,index=0,media=disk,format=raw -no-reboot -d in_asm,int
 GCCFLAGS := -m32 -ffreestanding -fno-stack-protector -nostdlib -mno-red-zone -I $(KERNEL_INCLUDE_DIR) -fno-pie -Ofast -Wall -Wextra -Werror -O2 -c
 LDFLAGS := -n -m elf_i386 -Ttext 0x8000 -T $(LINKERFILE) -o $(KERNEL_OUTPUT_BIN)
 
@@ -46,7 +46,7 @@ build: $(KERNEL_C_OBJECT_FILES) $(KERNEL_ASM_OBJECT_FILES) compile_bootloader
 exec:
 	$(ECHO) "Executing Project April in QEMU..."
 	$(QEMU) $(QEMUFLAGS)
-	$(CLEAR)
+# $(CLEAR)
 
 compile_bootloader:
 	$(MKDIR) $(BOOTLOADER_BUILD_DIR)
