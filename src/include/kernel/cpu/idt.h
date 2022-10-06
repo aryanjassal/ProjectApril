@@ -4,10 +4,11 @@
 
 // Define useful constants
 #define IDT_MAX_SIZE    256
-#define GDT_CODE        0x08
+#define GDT_DATA        0x10
 
 // Link external assembly code implementation
-extern void idt_load(uint32_t idt_ptr);
+// extern void idt_load(uint32_t idt_ptr);
+extern void idt_load();
 
 // Define the struct to store the individual IDT entries
 typedef struct idt_entry_t {
@@ -31,7 +32,7 @@ typedef struct isr_registers_t {
   uint32_t ds;
   uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
   uint32_t int_num, err_code;
-  // Intel manual says to use this method but...
+  // Intel manual says to use this method for ring0 but...
   uint32_t eip, cs, eflags;
   // James Molly's tutorial says to use this format
   // uint32_t eip, cs, eflags, user_esp, ss;

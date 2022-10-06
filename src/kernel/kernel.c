@@ -6,10 +6,11 @@
 
 void kmain() {
   kinfo("Jumping to C kernel successful!");
-  kwarn("Nothing else has been programmed yet.");
   idt_init();
-  // asm("int $4");
-  // halt();
+  asm("int $4");
+  asm("int $3");
+  asm("int $15");
+  asm("int $31");
 
   kerror("EOK [END OF KERNEL]");
   halt();

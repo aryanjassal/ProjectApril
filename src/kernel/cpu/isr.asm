@@ -1,15 +1,9 @@
-[GLOBAL idt_load]
-idt_load:
-  mov eax, [esp + 4]
-  lidt [eax]
-  ret
-
 %macro ISR_NOERRCODE 1
   [GLOBAL isr%1]
   isr%1:
     cli
-    ; push byte 0
-    ; push byte %1
+    push byte 0
+    push byte %1
     jmp isr_common_stub
 %endmacro
 
@@ -17,7 +11,7 @@ idt_load:
   [GLOBAL isr%1]
   isr%1:
     cli
-    ; push byte %1
+    push byte %1
     jmp isr_common_stub
 %endmacro
 

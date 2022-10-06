@@ -50,17 +50,18 @@ void idt_init() {
   set_interrupt_gate(30, isr30);
   set_interrupt_gate(31, isr31);
 
-  idt_load((uint32_t) &idt_descriptor);
+  idt_load();
   asm("sti");
-  asm("int $3");
 }
 
-// void isr_handler(isr_registers_t registers) {
-void isr_handler() {
-  kputs("Unhandled interrupt: ");
-  // char buf[4];
-  // kputs(utoa(registers.int_num, buf, 10));
-  // kputc('\n');
+void isr_handler(isr_registers_t registers) {
+  char msg[80];
+  memset(msg, 0, 80);
+  strcat(msg, "Unhandled interrupt: 0x");
+  char buf[4];
+  strcat(msg, utoa(registers.int_num, buf, 16));
+
+  kwarn(msg);
 }
 
 // Install a new entry in the IDT table
@@ -77,7 +78,7 @@ void idt_set_gate(uint8_t num, void *base, uint8_t flags) {
   // NOTE: You cannot change the segment selector as of yet
   idt[num].base_low = isr & 0xffff;
   idt[num].base_high = (isr >> 16) & 0xffff;
-  idt[num].segment_selector = GDT_CODE;
+  idt[num].segment_selector = 0x10;
   idt[num].reserved = 0;
   idt[num].flags = flags;
 }

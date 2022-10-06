@@ -61,6 +61,7 @@ clear_pipe:
 ; Use it to make useful functions or variables
 ; ---------------------------------------------
 
+; TODO: Add a BIOS error printing method with colour and same formatting as normal logs
 %include "disk/floppy.asm"
 %include "cpu/a20.asm"
 %include "cpu/gdt.asm"
