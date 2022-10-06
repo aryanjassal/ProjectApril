@@ -78,7 +78,7 @@ void idt_set_gate(uint8_t num, void *base, uint8_t flags) {
   // NOTE: You cannot change the segment selector as of yet
   idt[num].base_low = isr & 0xffff;
   idt[num].base_high = (isr >> 16) & 0xffff;
-  idt[num].segment_selector = 0x10;
+  idt[num].segment_selector = GDT_DATA;
   idt[num].reserved = 0;
   idt[num].flags = flags;
 }
