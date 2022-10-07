@@ -35,8 +35,6 @@ void kclear() {
 }
 
 // Print a newline in the terminal. If it is the last line, scroll down.
-// TODO: implement proper line clearing system
-// TODO: make the console scroll properly
 void kputnl() {
   console.cell = 0;
 
@@ -46,10 +44,10 @@ void kputnl() {
     return;
   }
 
+  // TODO: this doesn't look elegant. Well, make it.
   memmove(vgamem - VGA_CELLS, vgamem, VGA_LINES * VGA_CELLS * 2);
   kset_cursor(0, console.line);
   memset((void *)0xb8000 + (VGA_CELLS * console.line) * 2, 0, VGA_CELLS);
-  // kclear();
 }
 
 // Print a single character onto the screen
