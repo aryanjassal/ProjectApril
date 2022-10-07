@@ -10,3 +10,6 @@ void *memsetw(void *dest, int val, size_t count);
 
 // Copy bytes from a block of memory and set the destination to the copied memory
 void *memcpy(void *dest, const void *src, size_t count);
+
+// Move bytes from a block of memory to another one (overlap-safe)
+void *memmove(void *dest, const void *src, size_t count);

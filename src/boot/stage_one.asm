@@ -2,33 +2,38 @@
 ; TODO: Perform a far-jump to set the CS:IP registers properly
 ; Refer here https://wiki.osdev.org/My_Bootloader_Does_Not_Work#You_are_assuming_a_wrong_CS:IP_value
 
-; Move the boot disk into a variable which will be used when reading from disk
-mov [BOOT_DISK], dl       ; Store the boot disk for later use
+start:
+  mov [BOOT_DISK], dl       ; Store the boot disk for later use
 
-; Initialise the stack at 0x7c00
-mov bp, 0x7c00    ; Move the stack base pointer at the memory address 0x7c00
-mov sp, bp        ; Move the current stack pointer to the base (stack is empty)
+  ; Initialise the stack at 0x7c00 (it builds down)
+  mov bp, 0x7c00    ; Move the stack base pointer at the memory address 0x7c00
+  mov sp, bp        ; Move the current stack pointer to the base (stack is empty)
 
-; Load the second stage of the bootloader into the memory
-; TODO: state number of sectors to be read
-; TODO: first try hard drive then try floppy
-call read_disk
+  ;! Redundant
+  ; TODO: remove this
+  ; mov si, MSG_BOOT_OK
+  ; call binfo
+  ; jmp $
 
-; Prepare to enter 32-bit protected mode
-; cli                   ; Clear BIOS interrupts
-sti
+  ; Load the second stage of the bootloader into the memory
+  ; TODO: state number of sectors to be read
+  ; TODO: first try hard drive then try floppy
+  call read_disk
 
-; We need to first initialise the <ds> register before loading the GDT
-xor ax, ax            ; Basically the same as <mov ax, 0>, but faster
-mov ds, ax            ; Initialise <ds> register with a null value
-lgdt [gdt_desc]       ; Load the Global Descriptor Table
+  ; Prepare to enter 32-bit protected mode
+  cli                   ; Clear BIOS interrupts
 
-; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
-mov eax, cr0          ; We cannot directly modify the value of <cr0>, so first load it in the <eax> register
-or eax, 1             ; Then, set the first bit in the <eax> register
-mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <cr0>
+  ; We need to first initialise the <ds> register before loading the GDT
+  xor ax, ax            ; Basically the same as <mov ax, 0>, but faster
+  mov ds, ax            ; Initialise <ds> register with a null value
+  lgdt [gdt_desc]       ; Load the Global Descriptor Table
 
-jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
+  ; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
+  mov eax, cr0          ; We cannot directly modify the value of <cr0>, so first load it in the <eax> register
+  or eax, 1             ; Then, set the first bit in the <eax> register
+  mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <cr0>
+
+  jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
 
 ; Tell the compiler to compile the following instructions in 32-bit format
 [BITS 32]
@@ -39,6 +44,7 @@ clear_pipe:
   mov ds, ax        ; Store proper value in the <ds> register (<ds> register stores variables)
   mov ss, ax        ; Store proper value in the <ss> regsiter (<ss> register is the stack segment)
   mov esp, 0x90000  ; Start the stack at memory address 0x90000 (refer to the memory address table in the aforementioned site)
+
 
   ; call check_a20
   ; je .__boot_a20_enabled
@@ -70,6 +76,9 @@ clear_pipe:
 ; This is needed to be declared in order to not make the disk reading module fail
 BOOT_DISK db 0
 SECOND_STAGE equ 0x8000
+
+; Declaring string variables
+; MSG_BOOT_OK db "Boot successful", 0
 
 ; Pad the entire bootloader with zeroes because the bootloader must be exactly 512 bytes in size
 times 510-($-$$) db 0

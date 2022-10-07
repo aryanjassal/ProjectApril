@@ -9,22 +9,22 @@
 #define VGA_LINES 25
 
 // Define default VGA console colours
-#define VGA_COLOUR_BLACK        0
-#define VGA_COLOUR_BLUE         1
-#define VGA_COLOUR_GREEN        2
-#define VGA_COLOUR_CYAN         3
-#define VGA_COLOUR_RED          4
-#define VGA_COLOUR_MAGENTA      5
-#define VGA_COLOUR_BROWN        6
-#define VGA_COLOUR_LIGHT_GRAY   7
-#define VGA_COLOUR_DARK_GRAY    8
-#define VGA_COLOUR_LIGHT_BLUE   9
-#define VGA_COLOUR_LIGHT_GREEN  10
-#define VGA_COLOUR_LIGHT_CYAN   11
-#define VGA_COLOUR_LIGHT_RED    12
-#define VGA_COLOUR_PINK         13
-#define VGA_COLOUR_YELLOW       14
-#define VGA_COLOUR_WHITE        15
+#define VGA_COLOUR_BLACK        0x0
+#define VGA_COLOUR_BLUE         0x1
+#define VGA_COLOUR_GREEN        0x2
+#define VGA_COLOUR_CYAN         0x3
+#define VGA_COLOUR_RED          0x4
+#define VGA_COLOUR_MAGENTA      0x5
+#define VGA_COLOUR_BROWN        0x6
+#define VGA_COLOUR_LIGHT_GRAY   0x7
+#define VGA_COLOUR_DARK_GRAY    0x8
+#define VGA_COLOUR_LIGHT_BLUE   0x9
+#define VGA_COLOUR_LIGHT_GREEN  0xa
+#define VGA_COLOUR_LIGHT_CYAN   0xb
+#define VGA_COLOUR_LIGHT_RED    0xc
+#define VGA_COLOUR_PINK         0xd
+#define VGA_COLOUR_YELLOW       0xe
+#define VGA_COLOUR_WHITE        0xf
 
 // Create a struct to store the character information as per VGA console requirements
 typedef struct vgachar_t {
@@ -57,10 +57,12 @@ void kputs(char *str);
 // // !NOT IMPLEMENTED!
 // void kputui(uint32_t num);
 
-//? kok could be redundant
-// void kok(char *str);
+// TODO: add methods to set the console colour
+// TODO: add methods to individually set the foreground and the background color
 
 // Logging utilities to print [OK] [INFO] [WARN] and [ERROR] messages
 void kinfo(char *str);
 void kwarn(char *str);
 void kerror(char *str);
+// Could be redundant
+void kok(char *str);

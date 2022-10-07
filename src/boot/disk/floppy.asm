@@ -42,4 +42,4 @@ read_disk_failed:
 
 ERROR_DISKREADERROR db "DISK NOT FOUND", 0
 
-%include "console/bios_print.asm"
+%include "io/bios_print.asm"

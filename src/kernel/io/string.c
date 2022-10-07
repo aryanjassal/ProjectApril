@@ -40,6 +40,7 @@ char *strcat(char *destination, const char *source) {
   // char *ptr = destination + strlen(destination);
   // How ugly
   // TODO: make a better and more elegant looking solution
+  // TODO: something goes wrong with the array being destination being empty
   uint32_t i = 0, j = 0;
   for (; destination[i] != '\0'; i++);
 

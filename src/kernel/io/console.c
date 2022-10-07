@@ -1,7 +1,10 @@
 #include <stdint.h>
-#include "console/console.h"
+#include "io/console.h"
 #include "io/io.h"
 #include "utils.h"
+#include "mem.h"
+
+#include "io/string.h"
 
 // Use the character struct to parse the VGA memory to a variable
 static vgachar_t *vgamem = (vgachar_t *)0xb8000;
@@ -42,7 +45,11 @@ void kputnl() {
     kset_cursor(0, console.line);
     return;
   }
-  kclear();
+
+  memmove(vgamem - VGA_CELLS, vgamem, VGA_LINES * VGA_CELLS * 2);
+  kset_cursor(0, console.line);
+  memset((void *)0xb8000 + (VGA_CELLS * console.line) * 2, 0, VGA_CELLS);
+  // kclear();
 }
 
 // Print a single character onto the screen

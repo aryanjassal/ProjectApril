@@ -41,6 +41,29 @@ void *memcpy(void *dest, const void *src, size_t count) {
     actual_dest[i] = actual_src[i];
   }
 
-  // Return the destination pointer as required by the C standardk
+  // Return the destination pointer as required by the C standard
+  return dest;
+}
+
+// Move bytes from a block of memory to another one (overlap-safe)
+void *memmove(void *dest, const void *src, size_t count) {
+  // Cast the void pointers to byte-aligned pointers
+  uint8_t *actual_dest = (uint8_t *)dest;
+  uint8_t *actual_src = (uint8_t *)src;
+
+  // Create an array which is a clone of the source
+  uint8_t data_clone[sizeof(uint8_t) * count];
+
+  // Clone the data from src into the temporary array
+  for (size_t i = 0; i < count; i++) {
+    data_clone[i] = actual_src[i];
+  }
+
+  // Now move the data from the temporary clone array into destination address
+  for (size_t i = 0; i < count; i++) {
+    actual_dest[i] = data_clone[i];
+  }
+
+  // Return the destination pointer as required by the C standard
   return dest;
 }

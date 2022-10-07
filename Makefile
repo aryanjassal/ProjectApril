@@ -46,7 +46,7 @@ build: $(KERNEL_C_OBJECT_FILES) $(KERNEL_ASM_OBJECT_FILES) compile_bootloader
 exec:
 	$(ECHO) "Executing Project April in QEMU..."
 	$(QEMU) $(QEMUFLAGS)
-# $(CLEAR)
+	$(CLEAR)
 
 compile_bootloader:
 	$(MKDIR) $(BOOTLOADER_BUILD_DIR)

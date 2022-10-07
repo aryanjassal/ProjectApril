@@ -1,4 +1,4 @@
-#include "console/console.h"
+#include "io/console.h"
 #include "cpu/idt.h"
 #include "io/string.h"
 #include "mem.h"
@@ -51,7 +51,10 @@ void idt_init() {
   set_interrupt_gate(31, isr31);
 
   idt_load();
+  kinfo("IDT successfully installed");
+
   asm("sti");
+  kinfo("Interrupts enabled");
 }
 
 void isr_handler(isr_registers_t registers) {
@@ -67,15 +70,17 @@ void isr_handler(isr_registers_t registers) {
 // Install a new entry in the IDT table
 void idt_set_gate(uint8_t num, void *base, uint8_t flags) {
   // // Print debug info to the user
+  // char msg[80];
   // char buf[4];
-  // kputs("Installing IDT Handler #");
-  // kputs(utoa(num, buf, 10));
-  // kputc('\n');
+  // strcpy(msg, "Installing IDT Handler #");
+  // strcat(msg, utoa(num, buf, 10));
+  // kinfo(msg);
 
   uint32_t isr = (uint32_t) base;
 
   // Set the corresponding IDT data for the entry
   // NOTE: You cannot change the segment selector as of yet
+  // NOTE: The segment selector must be 0x10, or the GDT data selector for some reason
   idt[num].base_low = isr & 0xffff;
   idt[num].base_high = (isr >> 16) & 0xffff;
   idt[num].segment_selector = GDT_DATA;
