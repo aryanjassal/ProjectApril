@@ -1,5 +1,6 @@
 #include "io/console.h"
 #include "cpu/idt.h"
+#include "cpu/isr.h"
 #include "io/string.h"
 #include "mem.h"
 #include "utils.h"
@@ -55,16 +56,6 @@ void idt_init() {
 
   asm("sti");
   kinfo("Interrupts enabled");
-}
-
-void isr_handler(isr_registers_t registers) {
-  char msg[80];
-  memset(msg, 0, 80);
-  strcat(msg, "Unhandled interrupt: 0x");
-  char buf[4];
-  strcat(msg, utoa(registers.int_num, buf, 16));
-
-  kwarn(msg);
 }
 
 // Install a new entry in the IDT table

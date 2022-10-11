@@ -48,6 +48,9 @@ ISR_NOERRCODE 29
 ISR_NOERRCODE 30
 ISR_NOERRCODE 31
 
+; TODO: do something different for the IRQs
+; ISR_NOERRCODE 33
+
 [EXTERN isr_handler]
 
 ; isr_common_stub:

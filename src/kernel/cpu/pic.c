@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include "cpu/pic.h"
+#include "cpu/idt.h"
 #include "io/io.h"
+#include "io/console.h"
 
 // Remap the PIC
 // Credit to https://stackoverflow.com/questions/34561275/setting-up-interrupts-in-protected-mode-x86
@@ -8,9 +10,9 @@
 // There is no need to add io_wait() because we are interleaving between PIC1 and PIC2
 void pic_remap(int offset_master, int offset_slave) {
   // Save the mask status of the PIC to restore later
-  // uint8_t mask1, mask2;
-  // mask1 = inb(PIC1_DATA);
-  // mask2 = inb(PIC2_DATA);
+  uint8_t mask1, mask2;
+  mask1 = inb(PIC1_DATA);
+  mask2 = inb(PIC2_DATA);
 
   // [ICW1] Send the initialize command to the PICs
   outb(PIC1_COMMAND, ICW1_INIT);
@@ -29,18 +31,26 @@ void pic_remap(int offset_master, int offset_slave) {
   outb(PIC2_DATA, ICW4_8086);
 
   // Restore saved mask status of the PICs
-  outb(PIC1_DATA, 0x00);
-  outb(PIC2_DATA, 0x00);
+  outb(PIC1_DATA, mask1);
+  outb(PIC2_DATA, mask2);
+
+  // Log the successful remapping of the PIC chip
+  kinfo("PIC successfully remapped");
 }
 
 // Send the interrupt acknowledged (EOI) command to the PICs
-// void pic_send_eoi(unsigned char irq)
-// {
-//   // If the IRQ came from the slave chip, then tell the slave chip about the EOI as well
-// 	if(irq >= 8) {
-// 		outb(PIC2_COMMAND,PIC_EOI);
-//   }
+void pic_send_eoi(unsigned char irq)
+{
+  // If the IRQ came from the slave chip, then tell the slave chip about the EOI as well
+	if(irq >= 8) {
+		outb(PIC2_COMMAND, PIC_EOI);
+  }
 
-//   // Otherwise, merely informing the master chip is sufficient
-// 	outb(PIC1_COMMAND,PIC_EOI);
-// }
+  // Otherwise, merely informing the master chip is sufficient
+	outb(PIC1_COMMAND, PIC_EOI);
+}
+
+// Initialise the PIC chip
+void pic_init() {
+  pic_remap(0x20, 0x28);
+}
