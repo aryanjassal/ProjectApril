@@ -13,7 +13,3 @@ typedef struct isr_registers_t {
   // uint32_t eip, cs, eflags, user_esp, ss;
 } __attribute__((packed))
 isr_registers_t;
-
-// Initialise the keyboard input system
-// TODO: move it to a more appropriate place
-void keyboard_init();

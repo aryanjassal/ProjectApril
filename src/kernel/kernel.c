@@ -1,3 +1,5 @@
+// TODO: reorganise the project structure... yet again...
+#include "dev/keyboard.h"
 #include "io/console.h"
 #include "io/string.h"
 #include "cpu/pic.h"
@@ -13,12 +15,9 @@ void kmain() {
   // Initialise interrupts
   idt_init();
   pic_init();
-  // keyboard_init();
+  keyboard_init();
 
-  // Testing interrupts
-  asm("int $3");
-  asm("int $4");
-  asm("int $15");
+  for(;;);
 
   // The computer should never reach this part of the kernel
   // If it did, then notify the kernel and halt the computer

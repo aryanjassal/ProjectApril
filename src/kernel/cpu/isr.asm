@@ -1,7 +1,7 @@
 %macro ISR_NOERRCODE 1
   [GLOBAL isr%1]
   isr%1:
-    cli
+    ; cli
     push byte 0
     push byte %1
     jmp isr_common_stub
@@ -10,7 +10,7 @@
 %macro ISR_ERRCODE 1
   [GLOBAL isr%1]
   isr%1:
-    cli
+    ; cli
     push byte %1
     jmp isr_common_stub
 %endmacro
@@ -48,17 +48,9 @@ ISR_NOERRCODE 29
 ISR_NOERRCODE 30
 ISR_NOERRCODE 31
 
-; TODO: do something different for the IRQs
-; ISR_NOERRCODE 33
+ISR_NOERRCODE 32
 
 [EXTERN isr_handler]
-
-; isr_common_stub:
-;   pushad
-;   cld
-;   call isr_handler
-;   popad
-;   iret
 
 isr_common_stub:
   pusha
@@ -81,5 +73,5 @@ isr_common_stub:
 
   popa
   add esp, 0x08
-  sti
+  ; sti
   iret

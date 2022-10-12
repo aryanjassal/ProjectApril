@@ -6,62 +6,36 @@
 #include "kernel/cpu/pic.h"
 #include "kernel/utils.h"
 
+// The latest scancode returned by the IRQ
+// TODO: Make it an array instead and store multiple keys (upto a limit of course)
+uint16_t scancode;
+
 // Handle keyboard interrupts
-// void isr_keyboard(isr_registers_t registers) {
-void isr_keyboard() {
+// void irq_keyboard_handler(irq_registers_t registers) {
+void irq_keyboard_handler() {
   char buf[4];
-  kinfo(utoa(inb(0x64), buf, 16));
-  // pic_send_eoi(0x20 - registers.int_num);
+  uint16_t kb_in = inb(0x60);
+  if (kb_in != 0xfa) {
+    scancode = kb_in;
+    kinfo(utoa(scancode, buf, 16));
+  }
+  // if((inb(0x64) & 1) == 0) scancode = inb(0x60);
+
+  // char buf[4];
+
+  // for(int i = 1000; i > 0; i++) {
+  //   // Check if scan code is ready
+  //   if((inb(0x64) & 1) == 0) continue;
+  //   // Get the scan code
+  //   scancode = inb(0x60);
+  //   // kinfo(utoa(scancode, buf, 16));
+  //   break;
+  // }
+
   pic_send_eoi(1);
 }
 
 // Initialise the keyboard input system
 void keyboard_init() {
-  set_interrupt_gate(0x21, isr_keyboard);
-  outb(0x64, 0xae);
-  outb(0x64, 0xab);
-
-  // uint8_t response = inb(0x60);
-  // switch (response) {
-  //   case 0x00:
-  //     kok("PS/2 Port 1 self-test passed!");
-  //     break;
-    
-  //   case 0x01:
-  //     kerror("PS/2 Port 1 self-test failed: clock line stuck low");
-  //     break;
-    
-  //   case 0x02:
-  //     kerror("PS/2 Port 1 self-test failed: clock line stuck high");
-  //     break;
-
-  //   case 0x03:
-  //     kerror("PS/2 Port 1 self-test failed: data line stuck low");
-  //     break;
-
-  //   case 0x04: 
-  //     kerror("PS/2 Port 1 self-test failed: data line stuck high");
-  //     break;
-    
-  //   default:
-  //     kerror("PS/2 Port 1 self-test failed: undefined result");
-  //     break;
-  // }
-
-  // outb(0x60, 0xff);
-  // if (inb(0x64) == 0xaa) {
-  //   kinfo("Keyboard reset");
-  //   kok("Keyboard self-test passed!");
-  // } else {
-  //   kerror("Keyboard failed to initialise");
-  //   halt();
-  // }
-
-  while(1) {
-    char buf[4];
-    kinfo(utoa(inb(0x60), buf, 16));
-  }
-  // kinfo(utoa(inb(0x64), buf, 16));
-
-  // halt();
+  set_interrupt_gate(0x21, keyboard_handler);
 }

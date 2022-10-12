@@ -22,10 +22,11 @@ BUILD := $(MAKE) --no-print-directory
 LD := @ld
 CAT := @cat
 EMU := @qemu-system-x86_64
+CLEAR := @clear
 DEL := @rm -rf
 
 # Compiler flags
-CFLAGS := -m32 -mno-red-zone -ffreestanding -fno-stack-protector -fno-pie -nostdlib -I $(INC_DIR) -Ofast -O2 -Wall -Wextra -Werror -c
+CFLAGS := -m32 -mno-red-zone -ffreestanding -fno-stack-protector -fno-builtin -fno-pie -nostdlib -I $(INC_DIR) -Ofast -O2 -Wall -Wextra -Werror -c
 ASMFLAGS := -f elf32
 LDFLAGS := -n -m elf_i386 -Ttext 0x8000 -T $(LINKERFILE) -o $(LD_OUT_BIN)
 EMUFLAGS := -drive file=$(OUT_BIN),if=floppy,index=0,media=disk,format=raw -no-reboot -d guest_errors
@@ -51,7 +52,7 @@ link:
 run:
 	$(ECHO) "Emulating OS..."
 	$(EMU) $(EMUFLAGS)
-# $(CLEAR)
+	$(CLEAR)
 
 clean:
 	$(DEL) *.o

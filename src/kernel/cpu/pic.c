@@ -31,7 +31,9 @@ void pic_remap(int offset_master, int offset_slave) {
   outb(PIC2_DATA, ICW4_8086);
 
   // Restore saved mask status of the PICs
-  outb(PIC1_DATA, mask1);
+  // outb(PIC1_DATA, mask1 ^ 1);
+  outb(PIC1_DATA, (mask1 >> 1) | 1);
+  // outb(PIC1_DATA, mask1);
   outb(PIC2_DATA, mask2);
 
   // Log the successful remapping of the PIC chip
@@ -52,5 +54,6 @@ void pic_send_eoi(unsigned char irq)
 
 // Initialise the PIC chip
 void pic_init() {
-  pic_remap(0x20, 0x28);
+  // pic_remap(0x20, 0x28);
+  pic_remap(32, 40);
 }

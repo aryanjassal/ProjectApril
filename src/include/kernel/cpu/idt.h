@@ -64,6 +64,8 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
+extern void isr32();
+
 // Initialises the first 32 entries within the IDT in accordance to Intel's specifications
 void idt_init();
 

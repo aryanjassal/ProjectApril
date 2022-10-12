@@ -50,6 +50,9 @@ void idt_init() {
   set_interrupt_gate(29, isr29);
   set_interrupt_gate(30, isr30);
   set_interrupt_gate(31, isr31);
+  
+  // The timer interrupt (keep it disabled as it spams tick log messages)
+  set_interrupt_gate(32, isr32);
 
   idt_load();
   kinfo("IDT successfully installed");
