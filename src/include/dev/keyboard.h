@@ -12,14 +12,39 @@ extern void keyboard_handler();
 // Initialise the PS/2 keyboard input system
 void keyboard_init();
 
-// // Keyboard IRQ registers
-// typedef struct irq_registers_t {
-//   uint32_t ds;
-//   uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-//   // uint32_t int_num, err_code;
-//   // Intel manual says to use this method for ring0 but...
-//   uint32_t eip, cs, eflags;
-//   // James Molly's tutorial says to use this format
-//   // uint32_t eip, cs, eflags, user_esp, ss;
-// } __attribute__((packed))
-// irq_registers_t;
+// Initialise the default keyboard map
+char kbmap_default[128] = {
+  // -------------ROW 1--------------------
+  0, /* null key */
+  0x1b, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
+  // -------------ROW 2--------------------
+  '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
+  // -------------ROW 3--------------------
+  0, /* left control pressed */
+  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',
+  0, /* left shift pressed */
+  '\\',
+  // -------------ROW 4--------------------
+  'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',
+  0, /* right shift pressed */
+  '*',
+  // -------------ROW 5--------------------
+  0, /* left alt pressed */
+  ' ',
+  0, /* caps lock */
+  // -------------ROW 6--------------------
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* function keys 1-10 */
+  // -------------ROW 7--------------------
+  0, /* numlock pressed */
+  0, /* scroll lock pressed */
+  // -------------KEYPD--------------------
+  '7', '8', '9', '-',
+  '4', '5', '6', '+',
+  '1', '2', '3', '0', '.',
+  // -------------NULLK--------------------
+  0, 0, 0, /* null keys */
+  // -------------FN HI--------------------
+  0, 0, /* function keys 11 and 12 */
+  // -------------OTHER--------------------
+  0, /* other keys are undefined */
+};

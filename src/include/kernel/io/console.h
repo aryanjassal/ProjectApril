@@ -30,7 +30,8 @@
 typedef struct vgachar_t {
   uint8_t character;
   uint8_t colour;
-} vgachar_t;
+} __attribute__((packed))
+vgachar_t;
 
 // A struct to store console information
 // TODO: Add a buffer which is saved to and loaded from while switching console buffers

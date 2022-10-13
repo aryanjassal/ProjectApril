@@ -44,16 +44,37 @@ void kputnl() {
     return;
   }
 
-  // TODO: this doesn't look elegant. Well, make it.
-  memmove(vgamem - VGA_CELLS, vgamem, VGA_LINES * VGA_CELLS * 2);
+  for (uint16_t i = 0; i < (VGA_CELLS * VGA_LINES); i++) {
+    vgamem[i] = vgamem[i + VGA_CELLS];
+  }
+
   kset_cursor(0, console.line);
-  memset((void *)0xb8000 + (VGA_CELLS * console.line) * 2, 0, VGA_CELLS);
+  vgachar_t char_space;
+  char_space.character = ' ';
+  char_space.colour = console.colour;
+
+  for (uint8_t i = 0; i < VGA_CELLS; i++) {
+    vgamem[i + (VGA_CELLS * VGA_LINES)] = char_space;
+  }
 }
 
 // Print a single character onto the screen
 void kputc(char ch) {
   if (ch == '\n') {
     kputnl();
+    return;
+  }
+
+  if (ch == '\b') {
+    if (console.cell > 0) {
+      console.cell--;
+    } else if (console.line > 0) {
+      console.cell = VGA_CELLS - 1;
+      console.line--;
+    }
+    vgachar_t char_space = { ' ', console.colour };
+    vgamem[console.cell + (VGA_CELLS * console.line)] = char_space;
+    kset_cursor(console.cell, console.line);
     return;
   }
   

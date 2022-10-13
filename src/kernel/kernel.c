@@ -17,6 +17,7 @@ void kmain() {
   pic_init();
   keyboard_init();
 
+  // The main program loop to test out interrupts
   for(;;);
 
   // The computer should never reach this part of the kernel
