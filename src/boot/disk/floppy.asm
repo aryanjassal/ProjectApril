@@ -6,6 +6,7 @@ read_disk:
   push ax
   push bx
   push cx
+  ;TODO: Use this to pass parameters to this method
   push dx
 
   mov ah, 0x02            ; Tell the BIOS we'll be reading the disk
@@ -13,8 +14,8 @@ read_disk:
   mov al, 32              ; Read n number of sectors from disk
   mov ch, 0x00            ; Cylinder 0
   mov dh, 0x00            ; Head 0
-  xor bx, bx              ; Clear the value in <bx>
-  mov es, bx              ; Set the value of <es> to zero
+  ; xor bx, bx              ; Clear the value in <bx>
+  ; mov es, bx              ; Set the value of <es> to zero
   mov dl, [BOOT_DISK]     ; Read from the disk [boot drive]
   mov bx, SECOND_STAGE    ; Put the new data we read from the disk starting from the specifed location
 
@@ -30,6 +31,7 @@ read_disk:
   ret                     ; Return from this function
 
 ; Print an error message that the disk was not able to be read properly then hang indefinitely.
+;TODO: Print this error in the main loop, returning an error code instead
 read_disk_failed:
   mov si, ERROR_DISKREADERROR
   call bios_print

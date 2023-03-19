@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "mem.h"
 
-#include "io/string.h"
+// #include "io/string.h"
 
 // Use the character struct to parse the VGA memory to a variable
 static vgachar_t *vgamem = (vgachar_t *)0xb8000;

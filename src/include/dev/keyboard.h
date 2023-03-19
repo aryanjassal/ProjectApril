@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __DEV_KEYBOARD_H__
+#define __DEV_KEYBOARD_H__
 
 #include <stdint.h>
 
@@ -13,7 +14,7 @@ extern void keyboard_handler();
 void keyboard_init();
 
 // Initialise the default keyboard map
-char kbmap_default[128] = {
+static const char kbmap_default[128] = {
   // -------------ROW 1--------------------
   0, /* null key */
   0x1b, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -41,10 +42,12 @@ char kbmap_default[128] = {
   '7', '8', '9', '-',
   '4', '5', '6', '+',
   '1', '2', '3', '0', '.',
-  // -------------NULLK--------------------
+  // -------------NUMLK--------------------
   0, 0, 0, /* null keys */
   // -------------FN HI--------------------
   0, 0, /* function keys 11 and 12 */
   // -------------OTHER--------------------
-  0, /* other keys are undefined */
+  0 /* other keys are undefined */
 };
+
+#endif

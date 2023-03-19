@@ -4,7 +4,7 @@ MODULE := unnamed
 # The directory where the source files are located (here)
 MOD_SRC_DIR := $(CURDIR)
 
-# The sub-directory where the compiled files will be stored (defaulted to the module name)
+# The sub-directory where the compiled files will be stored (defaults to the module name)
 OUT_SUB_DIR := $(MODULE)
 MOD_OUT_DIR := $(OUT_DIR)/$(OUT_SUB_DIR)
 

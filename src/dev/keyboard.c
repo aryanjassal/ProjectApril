@@ -7,7 +7,7 @@
 #include "kernel/utils.h"
 
 // The latest scancode returned by the IRQ
-// TODO: Make it an array instead and store multiple keys (upto a limit of course)
+// TODO: Make it an array instead and store multiple keys (upto a limit of course (for now))
 // uint16_t scancode;
 
 // Handle keyboard interrupts

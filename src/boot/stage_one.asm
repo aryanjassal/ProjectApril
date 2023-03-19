@@ -2,18 +2,17 @@
 ; TODO: Perform a far-jump to set the CS:IP registers properly
 ; Refer here https://wiki.osdev.org/My_Bootloader_Does_Not_Work#You_are_assuming_a_wrong_CS:IP_value
 
+; Tell the compiler to compile the following instructions in 16-bit format
+[BITS 16]
 start:
-  mov [BOOT_DISK], dl       ; Store the boot disk for later use
-
-  ; Initialise the stack at 0x7c00 (it builds down)
-  mov bp, 0x7c00    ; Move the stack base pointer at the memory address 0x7c00
-  mov sp, bp        ; Move the current stack pointer to the base (stack is empty)
-
-  ;! Redundant
-  ; TODO: remove this
-  ; mov si, MSG_BOOT_OK
-  ; call binfo
-  ; jmp $
+  ; Initialise all the registers
+  xor ax, ax
+  mov es, ax
+  mov ds, ax
+  mov ss, ax
+  mov sp, 0x7c00
+  mov bp, sp
+  mov [BOOT_DISK], dl
 
   ; Load the second stage of the bootloader into the memory
   ; TODO: state number of sectors to be read
@@ -22,10 +21,6 @@ start:
 
   ; Prepare to enter 32-bit protected mode
   cli                   ; Clear BIOS interrupts
-
-  ; We need to first initialise the <ds> register before loading the GDT
-  xor ax, ax            ; Basically the same as <mov ax, 0>, but faster
-  mov ds, ax            ; Initialise <ds> register with a null value
   lgdt [gdt_desc]       ; Load the Global Descriptor Table
 
   ; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
@@ -43,13 +38,18 @@ clear_pipe:
   mov ax, DATASEG   ; Store the data segment value in the <ax> register
   mov ds, ax        ; Store proper value in the <ds> register (<ds> register stores variables)
   mov ss, ax        ; Store proper value in the <ss> regsiter (<ss> register is the stack segment)
-  mov esp, 0x90000  ; Start the stack at memory address 0x90000 (refer to the memory address table in the aforementioned site)
+  mov es, ax
+  mov fs, ax
+  mov gs, ax
+  mov ebp, 0x90000  ; Start the stack at memory address 0x90000 (refer to the memory address table in the aforementioned site)
+  mov esp, ebp
 
+  jmp SECOND_STAGE
 
   ; call check_a20
   ; je .__boot_a20_enabled
 
-  call fast_a20
+  ; call fast_a20
   ; call check_a20
   ; je .__boot_a20_enabled
 
@@ -58,9 +58,8 @@ clear_pipe:
   ; TODO: Make this concept actually work
   ; jmp $
   
-  .__boot_a20_enabled:
-    ; Jump to the second stage of the bootloader
-    jmp SECOND_STAGE
+  ; .__boot_a20_enabled:
+  ; Jump to the second stage of the bootloader
 
 ; ---------------------------------------------
 ; Code after this point will not get executed
@@ -76,9 +75,6 @@ clear_pipe:
 ; This is needed to be declared in order to not make the disk reading module fail
 BOOT_DISK db 0
 SECOND_STAGE equ 0x8000
-
-; Declaring string variables
-; MSG_BOOT_OK db "Boot successful", 0
 
 ; Pad the entire bootloader with zeroes because the bootloader must be exactly 512 bytes in size
 times 510-($-$$) db 0
