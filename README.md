@@ -1,6 +1,6 @@
-# Welcome to Project April
+# Welcome to Bling OS
 
-This is an operating system I'm working on as a hobby. I have dubbed this operating system "Project April" or simply "AprilOS".
+This is an operating system I'm working on as a hobby. I have dubbed this operating system "BlingOS", or simply "Bling".
 
 ## How do I run this?
 
