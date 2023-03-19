@@ -34,6 +34,18 @@ binfo:
   call bios_print
   ret
 
+berror:
+  push si 
+  mov si, MSG_ERROR
+  mov bl, COL_ERROR
+  call bios_print
+  pop si
+  mov bl, COL_MSG
+  call bios_print
+  mov si, TEXT_NEWLINE
+  call bios_print
+  ret
+
 ; Declaring useful string literals
 MSG_OK    db "[OK]    ", 0
 MSG_INFO  db "[INFO]  ", 0

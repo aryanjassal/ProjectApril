@@ -1,9 +1,12 @@
 [ORG 0x7c00]        ; Set the origin of the bootloader
-; TODO: Perform a far-jump to set the CS:IP registers properly
-; Refer here https://wiki.osdev.org/My_Bootloader_Does_Not_Work#You_are_assuming_a_wrong_CS:IP_value
 
 ; Tell the compiler to compile the following instructions in 16-bit format
 [BITS 16]
+
+; Fix the CS:IP value that could be messed up while booting
+jmp 0:start
+
+; The start point of the program
 start:
   ; Initialise all the registers
   xor ax, ax
@@ -15,20 +18,47 @@ start:
   mov [BOOT_DISK], dl
 
   ; Load the second stage of the bootloader into the memory
-  ; TODO: state number of sectors to be read
-  ; TODO: first try hard drive then try floppy
+  mov dh, 48
   call read_disk
+  cmp ah, 0
+  je disk_no_error
 
-  ; Prepare to enter 32-bit protected mode
-  cli                   ; Clear BIOS interrupts
-  lgdt [gdt_desc]       ; Load the Global Descriptor Table
+  cmp ah, 1
+  je disk_read_error
+  cmp ah, 2
+  je sectors_read_error
+  jmp disk_error
 
-  ; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
-  mov eax, cr0          ; We cannot directly modify the value of <cr0>, so first load it in the <eax> register
-  or eax, 1             ; Then, set the first bit in the <eax> register
-  mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <cr0>
+  ; If the disk reads fails
+  disk_read_error:
+    mov si, MSG_DISK_READ_ERROR
+    call berror
+    jmp $
 
-  jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
+  ; If the sector read are incorrect
+  sectors_read_error:
+    mov si, MSG_SECTORS_READ_ERROR
+    call berror
+    jmp $
+
+  ; Other unhandled disk read error
+  disk_error:
+    mov si, MSG_DISK_ERROR
+    call berror
+    jmp $
+
+  ; If the disk read suceeds with no error
+  disk_no_error:
+    ; Prepare to enter 32-bit protected mode
+    cli                   ; Clear BIOS interrupts
+    lgdt [gdt_desc]       ; Load the Global Descriptor Table
+
+    ; Set PE (Protection Enable) bit in <cr0> (Control Register 0)
+    mov eax, cr0          ; We cannot directly modify the value of <cr0>, so first load it in the <eax> register
+    or eax, 1             ; Then, set the first bit in the <eax> register
+    mov cr0, eax          ; Finally, move the <eax> with the PE bit set back into <cr0>
+
+    jmp CODESEG:clear_pipe    ; Perform a far-jump to clear the garbage 16-bit instructions and ready code for 32-bit architecture
 
 ; Tell the compiler to compile the following instructions in 32-bit format
 [BITS 32]
@@ -70,11 +100,16 @@ clear_pipe:
 %include "disk/floppy.asm"
 %include "cpu/a20.asm"
 %include "cpu/gdt.asm"
+%include "io/bios_print.asm"
 
 ; Declaring disk-reading-related variables
 ; This is needed to be declared in order to not make the disk reading module fail
 BOOT_DISK db 0
 SECOND_STAGE equ 0x8000
+
+MSG_DISK_READ_ERROR db "DISK READ ERROR", 0
+MSG_SECTORS_READ_ERROR db "INCORRECT NUMBER OF SECTORS READ", 0
+MSG_DISK_ERROR db "DISK ERROR", 0
 
 ; Pad the entire bootloader with zeroes because the bootloader must be exactly 512 bytes in size
 times 510-($-$$) db 0
